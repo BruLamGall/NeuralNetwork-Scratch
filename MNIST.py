@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-# Load and preprocess data
+'''Load and preprocess data'''
 print('Loading data...')
 data = pd.read_csv('Neural network/train.csv')
 data = np.array(data)         
@@ -54,14 +54,16 @@ def forward_prop(w1, b1, w2, b2, w3, b3, x):
     Performs the forward propagation of the neural network
     
     Args:
-        w1 (np.array): Weight matrix for the input to hidden step
-        b1 (np.array): Bias vector for the hidden layer
-        w2 (np.array): Weight matrix for the hidden to output layer
-        b2 (np.array): Bias vector for the output layer
+        w1 (np.array): Weight matrix for the input to hidden 1 step
+        b1 (np.array): Bias vector for the hidden 1 layer
+        w2 (np.array): Weight matrix for the hidden 1 to hidden 2 step
+        b2 (np.array): Bias vector for the hidden 2 layer
+        w3 (np.array): Weight matrix for the hidden 2 to output step
+        b3 (np.array): Bias vector for the output layer
         x  (np.array): Input data
     
     Returns:
-        tuple: z1, a1, a2 (intermediate and output values with and without activation function)
+        tuple: z1, a1, z2, a2, z3, a3 (intermediate and output values with and without activation function)
     '''
     z1 = w1.dot(x) + b1
     a1 = ReLU(z1)
@@ -73,13 +75,13 @@ def forward_prop(w1, b1, w2, b2, w3, b3, x):
 
 def backward_prop(z1, a1, z2, a2, z3, a3, w1, w2, w3, x, y):
     '''
-    Performs the backward propagation of the neural network
+    Performs the backward propagation of the neural network.
 
     Args:
-        y  (np.array): Expected output data
+        y  (np.array): Expected output data.
     
     Returns:
-        tuple: dw1, db1, dw2, db2 (gradients for all the neural network's parameters)
+        tuple: dw1, db1, dw2, db2, dw3, db3 (gradients for all the neural network's parameters).
     '''
     one_hot_y = one_hot(y)
     dz3 = a3 - one_hot_y
@@ -98,10 +100,10 @@ def update_params(w1, b1, w2, b2, w3, b3, dw1, db1, dw2, db2, dw3, db3, lr):
     Updates the params following the gradient descent formula <New -= Learning rate * Gradient>
 
     Args:
-        lr (float): The learning rate.
+        lr (float): The learning rate
     
     Returns:
-        tuple: Updated w1, b1, w2, b2.
+        tuple: Updated w1, b1, w2, b2, w3, b3
     '''
     w1 = w1 - lr * dw1
     b1 = b1 - lr * db1    
@@ -121,7 +123,7 @@ def gradient_descent(x, y, x_dev, y_dev, lr, iterations):
     Performs gradient descent to train the neural network
 
     Returns:
-        tuple: trained parameters w1, b1, w2, b2
+        tuple: trained parameters w1, b1, w2, b2, w3, b3
     '''
     w1, b1, w2, b2, w3, b3 = init_params()
     print('Starting Training...')
@@ -135,37 +137,17 @@ def gradient_descent(x, y, x_dev, y_dev, lr, iterations):
     return w1, b1, w2, b2, w3, b3
 
 
-if __name__ == "__main__":
-    '''
-    testimg = x_dev.T[352]
-    testimg = np.array([testimg])
-    print(testimg.size)
-    print(y_dev[352])
-    np.savetxt('imgpixels.csv', testimg, delimiter=',')
-    w1 = pd.read_csv('Neural network/NN Visualizer/Assets/Resources/w1.csv')
-    w1 = np.array(w1)
-    b1 = pd.read_csv('Neural network/NN Visualizer/Assets/Resources/b1.csv')
-    b1 = np.array(b1)
-    w2 = pd.read_csv('Neural network/NN Visualizer/Assets/Resources/w2.csv')
-    w2 = np.array(w2)
-    b2 = pd.read_csv('Neural network/NN Visualizer/Assets/Resources/b2.csv')
-    b2 = np.array(b2)
-    w3 = pd.read_csv('Neural network/NN Visualizer/Assets/Resources/w3.csv')
-    w3 = np.array(w3)
-    b3 = pd.read_csv('Neural network/NN Visualizer/Assets/Resources/b3.csv')
-    b3 = np.array(b3)
 
-    z1, a1, z2, a2, z3, a3 = forward_prop(w1, b1, w2, b2, w3, b3, testimg.T)
-    print(z1, a1, z2, a2, z3, a3)
-    '''
-    w1, b1, w2, b2, w3, b3 = gradient_descent(x_train, y_train, x_dev, y_dev, 0.13, 2000+1)
+if __name__ == "__main__":
+    w1, b1, w2, b2, w3, b3 = gradient_descent(x_train, y_train, x_dev, y_dev, 0.13, 2001)
     
-    # Save the trained parameters
+    '''Save the trained parameters'''
     print('Saving values...')
-    np.savetxt("Neural network/NN Visualizer/Assets/Resources/w1.csv", w1, delimiter=',')
-    np.savetxt("Neural network/NN Visualizer/Assets/Resources/b1.csv", b1.flatten(), delimiter=',')
-    np.savetxt("Neural network/NN Visualizer/Assets/Resources/w2.csv", w2, delimiter=',')
-    np.savetxt("Neural network/NN Visualizer/Assets/Resources/b2.csv", b2.flatten(), delimiter=',')
-    np.savetxt("Neural network/NN Visualizer/Assets/Resources/w3.csv", w3, delimiter=',')
-    np.savetxt("Neural network/NN Visualizer/Assets/Resources/b3.csv", b3.flatten(), delimiter=',')
+    np.savetxt("w1.csv", w1, delimiter=',')
+    np.savetxt("b1.csv", b1.flatten(), delimiter=',')
+    np.savetxt("w2.csv", w2, delimiter=',')
+    np.savetxt("b2.csv", b2.flatten(), delimiter=',')
+    np.savetxt("w3.csv", w3, delimiter=',')
+    np.savetxt("b3.csv", b3.flatten(), delimiter=',')
+
     print('Script is finished! Now you can go to NN Visualizer to test the model by yourself!')
