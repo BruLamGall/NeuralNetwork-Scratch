@@ -3,7 +3,7 @@ import pandas as pd
 
 '''Load and preprocess data'''
 print('Loading data...')
-data = pd.read_csv('Neural network/train.csv')
+data = pd.read_csv('train.csv') # This file can't be uploaded to gitgub, you can find it on kaggle
 data = np.array(data)         
 m, n = data.shape
 
@@ -151,3 +151,4 @@ if __name__ == "__main__":
     np.savetxt("b3.csv", b3.flatten(), delimiter=',')
 
     print('Script is finished! Now you can go to NN Visualizer to test the model by yourself!')
+
